@@ -1,0 +1,104 @@
+{% extends "layout.html.twig" %}
+	{% block title %}
+		Mon application Symfony
+	{% endblock %}
+    {% block body %}
+		<table class="table table-striped" width="100%">
+			<thead>
+				<tr>
+					<th>ID</th>
+					<th>Matériel</th>
+					<th>Durée</th>
+					<th>Action</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for materiel in materiels %}
+					<tr>
+						<td>{{materiel.id}}</td>
+						<td><a href="{{ path('materiel_show', {'id': materiel.id}) }}">{{materiel.nom}}</a></td>
+						<td>{{materiel.duree}}</td>
+						<td>
+							<form action="{{ path('materiel_delete', {'id': materiel.id}) }}" method="post" style="display:inline">
+								<input type="submit" value="Supprimer" class="btn btn-danger" />
+								{# Ceci va générer le champ CSRF #}
+								{{ form_rest(form) }}
+							{{ form_end(form) }}
+							<a href="/edit/{{materiel.id}}" class="btn btn-primary">Editer</a>
+						</td>
+					</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+		
+		<script> 
+			//Ajoute le bloc de recherche sur le table
+			$(document).ready(function() {
+				$(".table").DataTable({
+					"paging":   false,
+					"info":   false,
+					"language": {
+						"url": "/js/datatables.french.lang.json"
+					},
+					"columnDefs": [ {
+						  "targets": 'no-search',
+						  "searchable": false,
+					}],
+					"initComplete": function(settings, json) {
+						//On pose le focus sur la barre de recherche
+						$("input[type='search']").focus();	
+					}
+				});
+			});
+		</script> 
+		
+		<div id="container"></div>
+		<script>
+			Highcharts.chart('container', {
+				chart: {
+					type: 'column'
+				},
+				title: {
+					text: 'Graphique'
+				},
+				subtitle: {
+					text: 'Wikipedia'
+				},
+				xAxis: {
+					type: 'category',
+					labels: {
+						rotation: -45,
+					}
+				},
+				yAxis: {
+					min: 0,
+					title: {
+						text: 'Durée'
+					}
+				},
+				legend: {
+					enabled: false
+				},
+				tooltip: {
+					pointFormat: 'Durée: <b>{point.y} ans</b>'
+				},
+				series: [{
+					name: 'Matériel',
+					data: {{gfx_data|json_encode|raw}},
+					dataLabels: {
+						enabled: true,
+						rotation: -90,
+						color: '#FFFFFF',
+						align: 'right',
+						format: '{point.y:.1f}', // one decimal
+						y: 10, // 10 pixels down from the top
+						style: {
+							fontSize: '13px',
+							fontFamily: 'Verdana, sans-serif'
+						}
+					}
+				}]
+			});
+		</script>
+
+	{% endblock %}

@@ -1,0 +1,53 @@
+{% extends "layout.html.twig" %}
+
+    {% block body %}
+		<table class="table table-striped" width="100%">
+			<thead>
+				<tr>
+					<th>ID</th>
+					<th>Titre</th>
+					<th>Contenu</th>
+					<th>Action</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for comment in comments %}
+					<tr>
+						<td>{{comment.id}}</td>
+						<td>{{comment.titre}}</td>
+						<td>{{comment.contenu}}</td>
+						<td>
+							<form action="{{ path('comment_delete', {'id': comment.id}) }}" method="post" style="display:inline">
+								<input type="submit" value="Supprimer" class="btn btn-danger" />
+								{# Ceci va générer le champ CSRF #}
+								{{ form_rest(form) }}
+							{{ form_end(form) }}
+							<a href="/comment/edit/{{comment.id}}" class="btn btn-primary">Editer</a>
+						</td>
+					</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+		
+		<script> 
+			//Ajoute le bloc de recherche sur le table
+			$(document).ready(function() {
+				$(".table").DataTable({
+					"paging":   false,
+					"info":   false,
+					"language": {
+						"url": "/js/datatables.french.lang.json"
+					},
+					"columnDefs": [ {
+						  "targets": 'no-search',
+						  "searchable": false,
+					}],
+					"initComplete": function(settings, json) {
+						//On pose le focus sur la barre de recherche
+						$("input[type='search']").focus();	
+					}
+				});
+			});
+		</script> 
+
+	{% endblock %}        

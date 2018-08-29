@@ -1,0 +1,32 @@
+index:
+    path: /
+    controller: App\Controller\DefaultController::index
+
+app_lucky_number:
+    path: /lucky
+    controller: App\Controller\LuckyController::number
+
+materiel_add:
+    path: /add
+    controller: App\Controller\DefaultController::add
+materiel_delete:
+    path: /delete/{id}
+    controller: App\Controller\DefaultController::delete
+materiel_edit:
+    path: /edit/{id}
+    controller: App\Controller\DefaultController::edit
+materiel_show:
+    path: /show/{id}
+    controller: App\Controller\DefaultController::show
+comment:
+    path: /comment
+    controller: App\Controller\CommentController::index
+comment_add:
+    path: /comment/add
+    controller: App\Controller\CommentController::add
+comment_delete:
+    path: /comment/delete/{id}
+    controller: App\Controller\CommentController::delete
+comment_edit:
+    path: /comment/edit/{id}
+    controller: App\Controller\CommentController::edit

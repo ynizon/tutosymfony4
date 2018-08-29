@@ -1,0 +1,45 @@
+{% extends "layout.html.twig" %}
+
+    {% block body %}	
+		
+		
+		<!--Doc sur https://openclassrooms.com/fr/courses/3619856-developpez-votre-site-web-avec-le-framework-symfony/3623841-creer-des-formulaires-avec-symfony 
+		
+			permet davoir tout le form en un coup { form(form) }
+		-->
+		<div class="row">
+			{{ form_start(form, {'attr': {'class': 'form-horizontal'}}) }}
+				{# Les erreurs générales du formulaire. #}
+				
+
+				<div class="form-group">
+					{{ form_label(form.nom, "Nom", {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
+					{{ form_errors(form.nom) }}
+					<div class="col-sm-10">
+					  {{ form_widget(form.nom, {'attr': {'class': 'form-control'}}) }}
+					</div>
+				</div>
+				
+				<div class="form-group">
+					{{ form_label(form.duree, "Durée", {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
+					{{ form_errors(form.duree) }}
+					<div class="col-sm-10">
+					  {{ form_widget(form.duree, {'attr': {'class': 'form-control'}}) }}
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="col-sm-10 col-md-offset-4">
+						{# Pour le bouton, pas de label ni d'erreur, on affiche juste le widget #}
+						{{ form_widget(form.save, {'attr': {'class': 'btn btn-primary'}}) }}
+					</div>
+				</div>
+
+				{# Génération automatique des champs pas encore écrits.
+				 Dans cet exemple, ce serait le champ CSRF (géré automatiquement par Symfony !)
+				 et tous les champs cachés (type « hidden »). #}
+				{{ form_rest(form) }}
+
+				{# Fermeture de la balise <form> du formulaire HTML #}
+			{{ form_end(form) }}
+		</div>
+	{% endblock %}  
