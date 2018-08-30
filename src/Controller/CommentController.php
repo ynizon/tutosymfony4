@@ -1,6 +1,10 @@
 <?php // src/Controller/DefaultController.php
 
 namespace App\Controller;
+
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\Translation\TranslatorInterface;
+use App\Controller\MyController;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
@@ -16,15 +20,44 @@ use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 
-class CommentController extends Controller
+class CommentController extends MyController
 {
+	
     public function index(): Response
-    {
-		$em = $this->getDoctrine()->getManager();
-		$commentRepository = $em->getRepository('App\Entity\Comment');
+    {		
+		//$em = $this->getDoctrine()->getManager();		
+		//$commentRepository = $em->getRepository('App\Entity\Comment');
+		//Grace a l heritage
+		$commentRepository = $this->getRepository('Comment');
+		
 		$comments = $commentRepository->findAll();
 		$form = $this->get('form.factory')->create();
+		
         return $this->render('comment/index.html.twig', ["comments"=>$comments, "form"=>$form->createView()]);
+    }
+	
+	
+	 public function pagination($page): Response
+    {		
+		//$em = $this->getDoctrine()->getManager();		
+		//$commentRepository = $em->getRepository('App\Entity\Comment');
+		//Grace a l heritage
+		$commentRepository = $this->getRepository('Comment');
+		
+		$iNbComment = $this->container->getParameter('pagination');
+		$comments = $commentRepository->getComments($page,$iNbComment);
+		$form = $this->get('form.factory')->create();
+		
+		// On calcule le nombre total de pages grâce au count($listAdverts) qui retourne le nombre total d'annonces
+		$nbPages = ceil(count($comments) / $iNbComment);
+
+		// Si la page n'existe pas, on retourne une 404
+		if ($page > $nbPages) {
+		  throw $this->createNotFoundException("La page ".$page." n'existe pas.");
+		}
+
+		
+        return $this->render('comment/pagination.html.twig', ["comments"=>$comments, "form"=>$form->createView(),"nbPages"=>$nbPages,"page"=>$page]);
     }
 	
 	public function add(Request $request){
@@ -107,5 +140,31 @@ class CommentController extends Controller
 		}
 
 		return $this->redirectToRoute('materiel_show', array('id'=>$comment->getMaterielId()));
+	}
+	
+	public function show($slug, Request $request){
+		$em = $this->getDoctrine()->getManager();
+		$commentRepository = $em->getRepository('App\Entity\Comment');
+		$comments = $commentRepository->findBySlug($slug);
+		$comment = null;
+		foreach ($comments as $comment){
+			
+		}
+		
+		if (null === $comment) {
+			throw new NotFoundHttpException("Le Commentaire n'existe pas.");
+		}
+		
+		/*
+		$request->setLocale('en');	
+		$session = $request->getSession();
+		$session->set('_locale', "en");
+		$translator = $this->get('translator');
+		echo $request->getLocale();    		
+		echo $translator->trans('hello');exit();
+		*/
+		
+		
+		return $this->render('comment/show.html.twig', ['comment'=>$comment]);
 	}
 }

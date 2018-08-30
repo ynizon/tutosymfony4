@@ -64,4 +64,15 @@ class MaterielRepository extends ServiceEntityRepository
 		$results = $query->getResult();
 		return $results;
 	}
+	
+	public function findLikeNom($s){
+		//Avec le QueryBuilder
+		return $this->createQueryBuilder('materiel')
+            ->andWhere('materiel.nom like :val')
+            ->setParameter('val', "%".$s."%")
+            ->orderBy('materiel.nom', 'ASC')
+            ->getQuery()
+            ->getResult()
+        ;
+	}
 }

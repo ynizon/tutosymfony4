@@ -15,12 +15,19 @@ materiel_delete:
 materiel_edit:
     path: /edit/{id}
     controller: App\Controller\DefaultController::edit
+materiel_search:
+    path: /search
+    controller: App\Controller\DefaultController::search
 materiel_show:
     path: /show/{id}
     controller: App\Controller\DefaultController::show
 comment:
-    path: /comment
+    path: /comment/
     controller: App\Controller\CommentController::index
+comment_pagination:
+    path: /comment/page/{page}
+    controller: App\Controller\CommentController::pagination
+    defaults:   {"page":1}
 comment_add:
     path: /comment/add
     controller: App\Controller\CommentController::add
@@ -30,3 +37,6 @@ comment_delete:
 comment_edit:
     path: /comment/edit/{id}
     controller: App\Controller\CommentController::edit
+comment_slug:
+    path: /commentaire/{slug}
+    controller: App\Controller\CommentController::show

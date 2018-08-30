@@ -1,36 +1,44 @@
 {% extends "layout.html.twig" %}
-
+	{% block title %}
+		Mon application Symfony
+	{% endblock %}
     {% block body %}
+	
+		<form action="{{ path('materiel_search') }}" method="post" style="display:inline">
+			<input type="text" name="q" value="{{q}}" />
+			<input type="submit" value="Rechercher" class="btn btn-danger" />
+			{# Ceci va générer le champ CSRF #}
+			{{ form_rest(form) }}
+		{{ form_end(form) }}
+	
 		<table class="table table-striped" width="100%">
 			<thead>
 				<tr>
 					<th>ID</th>
-					<th>Titre</th>
-					<th>Contenu</th>
+					<th>Matériel</th>
+					<th>Durée</th>
 					<th>Action</th>
 				</tr>
 			</thead>
 			<tbody>
-				{% for comment in comments %}
+				{% for materiel in materiels %}
 					<tr>
-						<td>{{comment.id}}</td>
-						<td>{{comment.titre}}</td>
-						<td>{{comment.contenu}}</td>
+						<td>{{materiel.id}}</td>
+						<td><a href="{{ path('materiel_show', {'id': materiel.id}) }}">{{materiel.nom}}</a></td>
+						<td>{{materiel.duree}}</td>
 						<td>
-							<form action="{{ path('comment_delete', {'id': comment.id}) }}" method="post" style="display:inline">
+							<form action="{{ path('materiel_delete', {'id': materiel.id}) }}" method="post" style="display:inline">
 								<input type="submit" value="Supprimer" class="btn btn-danger" />
 								{# Ceci va générer le champ CSRF #}
 								{{ form_rest(form) }}
 							{{ form_end(form) }}
-							<a href="/comment/edit/{{comment.id}}" class="btn btn-primary">Editer</a>
+							<a href="/edit/{{materiel.id}}" class="btn btn-primary">Editer</a>
 						</td>
 					</tr>
 				{% endfor %}
 			</tbody>
-		</table>		
+		</table>
 		
-		<a href='/comment/page'>Pagination</a>
-
 		<script> 
 			//Ajoute le bloc de recherche sur le table
 			$(document).ready(function() {
@@ -51,5 +59,6 @@
 				});
 			});
 		</script> 
+		
 
-	{% endblock %}        
+	{% endblock %}

@@ -3,6 +3,9 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
+
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\CommentRepository")
@@ -23,6 +26,7 @@ class Comment
 
     /**
      * @ORM\Column(type="text")
+	 * @Assert\Length(min=10)
      */
     private $contenu;
 
@@ -86,6 +90,25 @@ class Comment
     public function setContenu(string $contenu): self
     {
         $this->contenu = $contenu;
+
+        return $this;
+    }
+	
+	/**
+	* @Gedmo\Slug(fields={"titre"})
+	* @ORM\Column(name="slug", type="string", length=255, unique=true)
+	*/
+	private $slug;
+  
+  
+	public function getSlug(): ?string
+    {
+        return $this->slug;
+    }
+
+    public function setSlug(string $slug): self
+    {
+        $this->slug = $slug;
 
         return $this;
     }

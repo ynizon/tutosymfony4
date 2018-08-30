@@ -24,7 +24,7 @@ class DefaultController extends Controller
 		$em = $this->getDoctrine()->getManager();
 		$materielRepository = $em->getRepository('App\Entity\Materiel');
 		$materiels = $materielRepository->findAll();//getRandom();
-		$form = $this->get('form.factory')->create();
+		$form = $this->get('form.factory')->create();//Suppression
 		
 		$gfx_data = array();
 		foreach ($materiels as $materiel){
@@ -32,6 +32,20 @@ class DefaultController extends Controller
 		}
 		
         return $this->render('index.html.twig', ["materiels"=>$materiels, "form"=>$form->createView(),"gfx_data"=>$gfx_data]);
+    }
+	
+	public function search(Request $request): Response
+    {
+		$q=$request->request->get("q");
+		$em = $this->getDoctrine()->getManager();
+		$materielRepository = $em->getRepository('App\Entity\Materiel');
+		//Methode magique
+		$materiels = $materielRepository->findByNom($q);
+		//Methode cree soit meme
+		$materiels = $materielRepository->findLikeNom($q);
+		$form = $this->get('form.factory')->create();		
+		
+        return $this->render('search.html.twig', ["q"=>$q,"materiels"=>$materiels, "form"=>$form->createView()]);
     }
 	
 	public function add(Request $request){
