@@ -14,6 +14,7 @@ Commencer par installer PHP 7
 Avec Laragon - https://laragon.org/download/
 Puis Composer - https://getcomposer.org/
 Puis phpMyAdmin - https://www.phpmyadmin.net/ ( a recopier dans le dossier etc/apps)
+Puis Yarn - https://yarnpkg.com/en/docs/install#windows-stable
 
 (Cela necessite peut etre un redemarrage)
 
@@ -107,6 +108,12 @@ Ajouter un validateur sur la longueur du contenu
 3e partie: le reste
 ------------------------------------------------------------------------------------
 
+Pages d'erreurs:
+- Passer en prod et tester la page 404 /toto
+- Dupliquer \vendor\symfony\twig-bundle\Resources\views\error.html.twig vers templates\bundles\TwigBundle\Exception\error404.html.twig
+- Adapter le layout
+- php bin/console cache:clear (ou rm -rf var/cache/prod/*)
+
 Ajout d'un backoffice via composer:
 composer req orm admin api
 Dans config/packages/easy_admin ajouter les entites
@@ -139,3 +146,20 @@ La pagination dans les commentaires
 - parametrage des routes
 - parametrage du controlleur
 - recuperer le parametre des services
+
+Extensions Twig (tag) à ajouter sur l'index des commentaires
+- composer require twig/extensions
+- Ajout du fichier src\Twig\AppExtension.php
+
+Gestionnaire d'evenements - ajout d'un listener pour ajouter une version Beta
+- Ajout du fichier src\Beta\Beta.php (configuration du service)
+- Ajout du fichier src\EventListener\BetaListener.php (configuration du service)
+
+Améliorer les temps de chargement:
+- composer require webpack-encore
+- Configurer webpack.config.js
+- modifier le layout pour avoir les assets
+- yarn install
+- yarn encore dev
+- yarn encore production
+- php bin/console clear:cache
