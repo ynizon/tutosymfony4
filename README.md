@@ -163,3 +163,8 @@ Améliorer les temps de chargement:
 - yarn encore dev
 - yarn encore production
 - php bin/console clear:cache
+
+Creation d une interface liee a la console
+- ConsoleController
+- Template console
+- route

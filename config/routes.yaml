@@ -40,3 +40,6 @@ comment_edit:
 comment_slug:
     path: /commentaire/{slug}
     controller: App\Controller\CommentController::show
+consolex:
+    path: /consolex
+    controller: App\Controller\ConsoleController::index

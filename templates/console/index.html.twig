@@ -1,0 +1,57 @@
+{% extends "layout.html.twig" %}
+	{% block title %}
+		Console Symfony
+	{% endblock %}
+    {% block body %}
+	
+		<form id="myform">
+			{% if not output is empty %}
+				<textarea cols="170" rows="10" style="background:#000000;color:#ffffff">{{output}}</textarea><br/>
+			{% endif %}
+			
+			<input placeholder="Entrer votre commande avec les arguments" type="text" name="execute" id="execute" value="{{execute}}" class="form-control"/>
+			<input type="submit" value="Executer" class="btn btn-primary" />
+		</form>
+		<table class="table table-striped" width="100%">
+			<thead>
+				<tr>
+					<th>Nom</th>
+					<th>Description</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for command in commands %}
+					<tr>						
+						<td style="cursor:pointer" onclick="addAction('{{command.name}}')">{{command.name}}</td>
+						<td>{{command.description}}</td>						
+					</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+		
+		<script> 
+			//Ajoute le bloc de recherche sur le table
+			$(document).ready(function() {
+				$(".table").DataTable({
+					"paging":   false,
+					"info":   false,
+					"language": {
+						"url": "/js/datatables.french.lang.json"
+					},
+					"columnDefs": [ {
+						  "targets": 'no-search',
+						  "searchable": false,
+					}],
+					"initComplete": function(settings, json) {
+						//On pose le focus sur la barre de recherche
+						$("input[type='search']").focus();	
+					}
+				});
+			});
+			
+			function addAction(sAction){
+				document.getElementById('execute').value=sAction;
+				//document.getElementById('myform').submit();
+			}
+		</script> 
+	{% endblock %}
